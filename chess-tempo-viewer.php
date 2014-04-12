@@ -29,16 +29,17 @@ function chessTempoViewer($attributes, $content = NULL) {
         'piecesize' => '46',
         'movesformat' => 'default'
     ), $attributes ) );
-    if (is_null($content)) {
+    $cleaned = cleanup_pgn($content);
+    if (is_null($cleaned)) {
         $type = "pgnfile";
         $pgn = $attributes['pgnfile'];
         $pgnpart = "pgnFile: $pgn";
     } else {
         $type = "pgnstring";
         if (is_null($fen)) {
-            $pgnpart = "pgnString: '$content'";
+            $pgnpart = "pgnString: '$cleaned'";
         } else {
-            $pgn = '[FEN "' . $fen . ']" ' . $content;
+            $pgn = '[FEN "' . $fen . ']" ' . $cleaned;
             $pgnpart = "pgnString: '$pgn'";
         }
     }
@@ -68,6 +69,16 @@ EOD;
 }
 
 add_shortcode( 'ctpgn', 'chessTempoViewer');
+
+// Cleanup the content, so it will not have any errors. Known are
+// * line breaks ==> Spaces
+// * Pattern: ... ==> ..
+function cleanup_pgn( $content ) {
+    $search = array("...", "&#8230;");
+    $replace = array("..", "..");
+    $tmp = str_replace($search, $replace, $content);
+    return str_replace (array("\r\n", "\n", "\r", "<br />"), ' ', $tmp);
+}
 
 // [bartag foo="foo-value"]
 function bartag_func( $atts ) {
