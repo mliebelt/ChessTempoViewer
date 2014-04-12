@@ -1,0 +1,13 @@
+.ct-black-square
+{
+    background-color: #88a0a9;
+}
+
+.ct-white-square
+{
+    background-color: #fdfdfd;
+}
+.ct-board-border
+{
+    border:10px solid darkslategray;
+}

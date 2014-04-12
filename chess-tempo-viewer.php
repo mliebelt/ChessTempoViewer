@@ -1,0 +1,82 @@
+<?php
+
+/*
+Plugin Name: Chess Tempo Viewer
+Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Description: Integrates the Chess Tempo Viewer into WordPress
+Version: 1.0
+Author: Markus Liebelt
+Author URI: http://URI_Of_The_Plugin_Author
+License: A "Slug" license name e.g. GPL2
+*/
+
+function pgnviewer_js_and_css(){
+    wp_enqueue_script("jquery");
+    wp_enqueue_script('pgnyui', 'http://chesstempo.com/js/pgnyui.js');
+    wp_enqueue_script('pgnviewer', 'http://chesstempo.com/js/pgnviewer.js');
+    wp_enqueue_style('pgnviewer-css', 'http://chesstempo.com/css/board-min.css');
+    wp_enqueue_style('mine', plugins_url('mine.css', __FILE__));
+}
+
+add_action('wp_enqueue_scripts', 'pgnviewer_js_and_css');
+
+// [ctpgn pieceSet=leipzig pieceSize=40 movesformat=main_on_own_line] 1. e4 e5 2. Nf3 Nc6 3. Bb5 [/ctpgn]
+function chessTempoViewer($attributes, $content = NULL) {
+    extract( shortcode_atts( array(
+        'id' => 'demo',
+        'fen' => NULL,
+        'pieceset' => 'merida',
+        'piecesize' => '46',
+        'movesformat' => 'default'
+    ), $attributes ) );
+    if (is_null($content)) {
+        $type = "pgnfile";
+        $pgn = $attributes['pgnfile'];
+        $pgnpart = "pgnFile: $pgn";
+    } else {
+        $type = "pgnstring";
+        if (is_null($fen)) {
+            $pgnpart = "pgnString: '$content'";
+        } else {
+            $pgn = '[FEN "' . $fen . ']" ' . $content;
+            $pgnpart = "pgnString: '$pgn'";
+        }
+    }
+    $text = "";
+    //$text .= var_dump($attributes);
+/*    $text .= "Type: $type ";
+    $text .= "Set:  $pieceSet";
+    $text .= "Size: $pieceSize ";
+    $text .= "Format: $movesFormat";*/
+    $template = <<<EOD
+<script>
+    new PgnViewer(
+            { boardName: '$id',
+                $pgnpart,
+                pieceSet: '$pieceset',
+                pieceSize: $piecesize,
+                showCoordinates: true,
+                movesFormat: '$movesformat'
+            }
+    );
+</script>
+
+<div id="$id-container"></div>
+<div id="$id-moves" width="650px"></div>
+EOD;
+    return $text . $template;
+}
+
+add_shortcode( 'ctpgn', 'chessTempoViewer');
+
+// [bartag foo="foo-value"]
+function bartag_func( $atts ) {
+    extract( shortcode_atts( array(
+        'foo' => 'something',
+        'bar' => 'something else',
+    ), $atts ) );
+
+    return "foo = {$foo}";
+}
+add_shortcode( 'bartag', 'bartag_func' );
+?>
