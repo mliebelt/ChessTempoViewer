@@ -15,7 +15,7 @@ function pgnviewer_js_and_css(){
     wp_enqueue_script('pgnyui', 'http://chesstempo.com/js/pgnyui.js');
     wp_enqueue_script('pgnviewer', 'http://chesstempo.com/js/pgnviewer.js');
     wp_enqueue_style('pgnviewer-css', 'http://chesstempo.com/css/board-min.css');
-    wp_enqueue_style('mine', plugins_url('mine.css', __FILE__));
+    wp_enqueue_style('ctpgn', plugins_url('ctpgn.css', __FILE__));
 }
 
 add_action('wp_enqueue_scripts', 'pgnviewer_js_and_css');

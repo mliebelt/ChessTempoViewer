@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: mliebelt
 Donate link:
-Tags: test
+Tags: pgn,chess,chessboard
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag:
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,16 +13,33 @@ Integrates the chess board of ChessTempo into WordPress. Pure implementation wit
 == Description ==
 
 Integrate  the chess board of ChessTempo (see [ChessTempo PGN Viewer Usage](http://chesstempo.com/pgn-usage.html) for
-some of the options. These are the parameters:
+some of the options).
 
-*   pgnFile: URL to the pgn file. If you want to embed the PGN directly see the example below
-*   pieceSet: possible are 'merida' (the default), 'leipzig', 'maya', 'condal', 'case' and 'kingdom'
-*   pieceSize The size of the pieces to use in pixels, currently supported sizes are '20', '24', '29', '35', '40' and '46'. Default size is 46
-*   movesFormat The style of formatting for the moves display, either "default" or "main_on_own_line" for a
-    display which puts the main line moves on their own line with the annotations/variations indented below the main line.
-*   layout: possible are board-top (default), board-left, board-right, or board-bottom
-*   id: name of the board on the page. Only necessary, if there is more than one board on the page. The names
-    have to be unique per page, not globally.
+Use following tag to insert a chessboard:
+
+`[pgn parameter=value ...]
+... chess games in PGN format ...
+[/pgn]`
+
+Tag parameters:
+
+ *   pgnFile: URL to the pgn file. If you want to embed the PGN directly, embed it like the example below. (This parameter
+     is not implemented yet)
+ *   pieceSet: possible are 'merida' (the default), 'leipzig', 'maya', 'condal', 'case' and 'kingdom'
+ *   pieceSize: The size of the pieces to use in pixels, currently supported sizes are '20', '24', '29', '35', '40' and '46'. Default size is 46
+ *   movesFormat: The style of formatting for the moves display, either "default" or "main_on_own_line" for a
+     display which puts the main line moves on their own line with the annotations/variations indented below the main line.
+ *   layout: possible are board-top (default), board-left, board-right, or board-bottom (not implemented yet)
+ *   id: name of the board on the page. Only necessary, if there is more than one board on the page. The names
+     have to be unique per page, not globally.
+
+Example:
+
+`[ctpgn id=fen fen="r5k1/ppqb2pp/2n1pr2/3pN1QP/2pP2B1/P1P5/2P2PP1/R3R1K1 w - - 0 23"]
+    23. Nxd7 {verwundert schlug Schwarz den Springer} Qxd7 24. Qxf6 {Schwarz fällt aus allen Wolken!} gxf6
+    25. Bxe6+ Qxe6 26. Rxe6 {der Rest ist Sache der Technik} Kf7 27. Rd6 Rd8 28. Rxd8 Nxd8 29. f4 Ne6
+    30. g3 Ng7 31. g4 f5 32. h6 Ne6 33. gxf5 Nxf4 34. Kf2 Kf6 35. Kf3 Kxf5 36. a4 Ng6 37. a5 Kg5
+    38. Rb1 b6 39. Rxb6 Kxh6 40. Ra6 Kg5 41. Rxa7 h5 42. Rg7 {und Schwarz gibt auf} * [/ctpgn]`
 
 == Installation ==
 
@@ -36,23 +53,10 @@ e.g.
 
 See the following examples for how to use it.
 
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Board from a special position, with most parameter (pieceSet, pieceSize) with default values.
+2. Tiny board from the start position.
 
 == Examples ==
 
@@ -86,48 +90,11 @@ Again the finish of a game with the result. See the variations with their syntax
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 0.9.0 =
+* First published version, mostly feature complete.
+* Missing: pgnFile as alternative to embedding the moves.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 0.9.0 =
+No upgrade notices necessary.
