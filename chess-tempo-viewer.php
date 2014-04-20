@@ -27,7 +27,8 @@ function chessTempoViewer($attributes, $content = NULL) {
         'fen' => NULL,
         'pieceset' => 'merida',
         'piecesize' => '46',
-        'movesformat' => 'default'
+        'movesformat' => 'default',
+        'layout' => 'top'
     ), $attributes ) );
     $cleaned = cleanup_pgn($content);
     if (is_null($cleaned)) {
@@ -42,6 +43,16 @@ function chessTempoViewer($attributes, $content = NULL) {
             $pgn = '[FEN "' . $fen . ']" ' . $cleaned;
             $pgnpart = "pgnString: '$pgn'";
         }
+    }
+    if ($layout == 'bottom') {
+        $float = <<<EOD
+<div id="$id-moves">
+</div><div id="$id-container" class="cont-float-$layout"></div>
+EOD;
+    } else {
+        $float = <<<EOD
+<div id="$id-container" class="cont-float-$layout"></div><div id="$id-moves"></div>
+EOD;
     }
     $text = "";
     //$text .= var_dump($attributes);
@@ -62,8 +73,8 @@ function chessTempoViewer($attributes, $content = NULL) {
     );
 </script>
 
-<div id="$id-container"></div>
-<div id="$id-moves" width="650px"></div>
+$float
+<div class="cont-float-clear"></div>
 EOD;
     return $text . $template;
 }

@@ -3,8 +3,8 @@ Contributors: mliebelt
 Donate link:
 Tags: pgn,chess,chessboard
 Requires at least: 3.0.1
-Tested up to: 3.8.1
-Stable tag: 0.9.0
+Tested up to: 3.8.2
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,24 +12,28 @@ Integrates the chess board of ChessTempo into WordPress. Pure implementation wit
 
 == Description ==
 
-Integrate  the chess board of ChessTempo (see [ChessTempo PGN Viewer Usage](http://chesstempo.com/pgn-usage.html) for
-some of the options).
+Integrate  the chess board of ChessTempo for some of the options).
+
+See [ChessTempo PGN Viewer Usage](http://chesstempo.com/pgn-usage.html) for all the parameters available, this plugin
+ only translates them to WordPress.
 
 Use following tag to insert a chessboard:
 
-`[pgn parameter=value ...]
+`[ctpgn parameter=value ...]
 ... chess games in PGN format ...
-[/pgn]`
+[/ctpgn]`
 
 Tag parameters:
 
- *   pgnFile: URL to the pgn file. If you want to embed the PGN directly, embed it like the example below. (This parameter
-     is not implemented yet)
+ *   pgnFile: URL to the pgn file. If you want to embed the PGN directly, embed it like the example below. **(This parameter is not implemented yet)**
  *   pieceSet: possible are 'merida' (the default), 'leipzig', 'maya', 'condal', 'case' and 'kingdom'
  *   pieceSize: The size of the pieces to use in pixels, currently supported sizes are '20', '24', '29', '35', '40' and '46'. Default size is 46
+ *   fen: The fen string if the game does not start from the beginning position
  *   movesFormat: The style of formatting for the moves display, either "default" or "main_on_own_line" for a
      display which puts the main line moves on their own line with the annotations/variations indented below the main line.
- *   layout: possible are board-top (default), board-left, board-right, or board-bottom (not implemented yet)
+ *   layout: top (default), bottom, left or right. top means board is on top, moves below, bottom vice versae. left
+     sets the board on the top left, and the moves flow on the right and below, right sets the board on the right, and moves
+     flow on the left and below.
  *   id: name of the board on the page. Only necessary, if there is more than one board on the page. The names
      have to be unique per page, not globally.
 
@@ -53,10 +57,32 @@ e.g.
 
 See the following examples for how to use it.
 
+== Frequently Asked Questions ==
+
+= What is the minimal markup I have to use? =
+
+The minimal markup is (as an example):
+
+`[ctpgn] 1. e4 e5 2. Nf3 Nc6 [/ctpgn]`
+
+This will use the default values for pieceSet, pieceSize, movesFormat and id, and only works, if that board is the
+only one on that WordPress page.
+
+= I don't see the metadata of the game? =
+
+This is not a feature of ChessTempo viewer, so it is ignored by him. I have not found a way to display it.
+
+= Why is the tag used so complicated? =
+
+I have choosen `ctpgn` (for ChessTempo PGN) because there are other plugins out like [Embed Chessboard](http://wordpress.org/plugins/embed-chessboard/)
+that already use as markup `pgn` (which is the most natural one). It may be useful to have both plugins used on
+the same page or on the same site, so I wanted to use a different tag name.
+
 == Screenshots ==
 
 1. Board from a special position, with most parameter (pieceSet, pieceSize) with default values.
 2. Tiny board from the start position.
+3. Layout variation with parameter layout == 'left'.
 
 == Examples ==
 
@@ -90,11 +116,24 @@ Again the finish of a game with the result. See the variations with their syntax
 
 == Changelog ==
 
+= 0.9.2 =
+* Added layout parameter with options top, bottom, left or right.
+
+= 0.9.1 =
+* Corrected some documentation errors.
+* Completed the `readme.txt`.
+
 = 0.9.0 =
 * First published version, mostly feature complete.
 * Missing: pgnFile as alternative to embedding the moves.
 
 == Upgrade Notice ==
+
+= 0.9.2 =
+No backward incompatible change, the new layout paramter has the same default as before.
+
+= 0.9.1 =
+No upgrade notices necessary.
 
 = 0.9.0 =
 No upgrade notices necessary.
