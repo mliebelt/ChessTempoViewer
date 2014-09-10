@@ -2,17 +2,19 @@
 
 /*
 Plugin Name: Chess Tempo Viewer
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: http://wordpress.org/plugins/chesstempoviewer/
 Description: Integrates the Chess Tempo Viewer into WordPress
-Version: 1.0
+Version: 0.9.3
 Author: Markus Liebelt
-Author URI: http://URI_Of_The_Plugin_Author
-License: A "Slug" license name e.g. GPL2
+Author URI: http://profiles.wordpress.org/mliebelt
+License: GPLv2 or later
 */
 
 function pgnviewer_js_and_css(){
+    $loc = get_locale();
     wp_enqueue_script("jquery");
     wp_enqueue_script('pgnyui', 'http://chesstempo.com/js/pgnyui.js');
+    wp_enqueue_script('pgnlocale', "http://chesstempo.com/locale/$loc/LC_MESSAGES/ct.json");
     wp_enqueue_script('pgnviewer', 'http://chesstempo.com/js/pgnviewer.js');
     wp_enqueue_style('pgnviewer-css', 'http://chesstempo.com/css/board-min.css');
     wp_enqueue_style('ctpgn', plugins_url('ctpgn.css', __FILE__));
@@ -91,14 +93,21 @@ function cleanup_pgn( $content ) {
     return str_replace (array("\r\n", "\n", "\r", "<br />"), ' ', $tmp);
 }
 
-// [bartag foo="foo-value"]
-function bartag_func( $atts ) {
-    extract( shortcode_atts( array(
-        'foo' => 'something',
-        'bar' => 'something else',
-    ), $atts ) );
+/** Step 2 (from text above). */
+add_action( 'admin_menu', 'ctpgn_menu' );
 
-    return "foo = {$foo}";
+/** Step 1. */
+function ctpgn_menu() {
+    add_submenu_page('options-general.php', 'Chess Tempo Viewer Settings', 'Chess Tempo Viewer', 'administrator', __FILE__, 'ctpgn_options' );
 }
-add_shortcode( 'bartag', 'bartag_func' );
+
+/** Step 3. */
+function ctpgn_options() {
+    if ( !current_user_can( 'manage_options' ) )  {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    echo '<div class="wrap">';
+    echo '<p>Greetings from Chess Tempo Viewer.</p>';
+    echo '</div>';
+}
 ?>
