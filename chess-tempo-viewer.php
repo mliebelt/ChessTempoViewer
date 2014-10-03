@@ -4,7 +4,7 @@
 Plugin Name: Chess Tempo Viewer
 Plugin URI: http://wordpress.org/plugins/chesstempoviewer/
 Description: Integrates the Chess Tempo Viewer into WordPress
-Version: 0.9.3
+Version: 0.9.4
 Author: Markus Liebelt
 Author URI: http://profiles.wordpress.org/mliebelt
 License: GPLv2 or later

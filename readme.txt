@@ -4,7 +4,7 @@ Donate link:
 Tags: pgn,chess,chessboard
 Requires at least: 3.0.1
 Tested up to: 4.0.0
-Stable tag: 0.9.3
+Stable tag: 0.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,8 +51,8 @@ This section describes how to install the plugin and get it working.
 
 e.g.
 
-1. Upload `ChessTempoViewer.zip` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Upload `ChessTempoViewer.zip` to the `/wp-content/plugins/` directory, or install it directly from the admin plugins screen.
+1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Place `[ctpgn] <moves> [/ctpgn]` in your page
 
 See the following examples for how to use it.
@@ -77,6 +77,11 @@ This is not a feature of ChessTempo viewer, so it is ignored by him. I have not 
 I have choosen `ctpgn` (for ChessTempo PGN) because there are other plugins out like [Embed Chessboard](http://wordpress.org/plugins/embed-chessboard/)
 that already use as markup `pgn` (which is the most natural one). It may be useful to have both plugins used on
 the same page or on the same site, so I wanted to use a different tag name.
+
+= The plugin is not working for me. =
+
+There is a known problem if you use the theme Twentythirteen. See the question at [Stackoverflow](http://wordpress.stackexchange.com/questions/163334/how-to-disable-css-rule-in-twentythirteen-style-css) for details. At the end, we have
+found a fix for that, so that the viewer is displayed correctly on all themes. Ensure to go to at least version 0.9.4.
 
 == Screenshots ==
 
@@ -115,6 +120,12 @@ Again the finish of a game with the result. See the variations with their syntax
 
 
 == Changelog ==
+= 0.9.4 =
+* Fixed the nasty bug with display of the board in theme Twentythirteen, thanks a lot to Mars and his
+[answer on Stackoverflow](http://wordpress.stackexchange.com/a/163337/42578).
+
+= 0.9.3 =
+* Fixed the version problem, so that the plugin is now found with the correct version, and does not warn that there is an update (version 1.0)
 
 = 0.9.2 =
 * Added layout parameter with options top, bottom, left or right.
