@@ -4,7 +4,7 @@ Donate link:
 Tags: pgn,chess,chessboard
 Requires at least: 3.0.1
 Tested up to: 4.0.0
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,13 @@ Again the finish of a game with the result. See the variations with their syntax
 
 
 == Changelog ==
+
+= 0.9.5 =
+* Added localization to use the language characters of the blogs language.
+* Supported languages are: en_US, de_DE, fr_FR, pt_BR, es_ES.
+* Files are located under: http://chesstempo.com/locale/es_ES/LC_MESSAGES/ct.json, so you can search there for additional ones.
+* See my [Stackoverflow question](http://wordpress.stackexchange.com/questions/163473/where-does-the-locale-come-from) for details.
+
 = 0.9.4 =
 * Fixed the nasty bug with display of the board in theme Twentythirteen, thanks a lot to Mars and his
 [answer on Stackoverflow](http://wordpress.stackexchange.com/a/163337/42578).
@@ -139,6 +146,16 @@ Again the finish of a game with the result. See the variations with their syntax
 * Missing: pgnFile as alternative to embedding the moves.
 
 == Upgrade Notice ==
+
+= 0.9.5 =
+See if you can choose the correct language for your word press installation. Localizations are at least available for
+English, German, French, Portuguese. The localization is then set in the header of the rendered HTML (2nd line).
+
+= 0.9.4 =
+No upgrade notices necessary.
+
+= 0.9.3 =
+No upgrade notices necessary.
 
 = 0.9.2 =
 No backward incompatible change, the new layout paramter has the same default as before.

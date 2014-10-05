@@ -106,6 +106,7 @@
   <target name="all" depends="build.modules" description="build all"/>
 
     <target name="zip" description="Builds the zip file that may then be distributed to WordPress">
-        <zip destfile="../ChessTempoViewer.zip" basedir="." excludes=".idea/**, .git/**, *.iml, ChessTempoViewer.zip.*"/>
+        <delete file="../ChessTempoViewer.zip" failonerror="false"></delete>
+        <zip destfile="../ChessTempoViewer.zip" basedir="." excludes="debug/**, screenshot*.*, .idea/**, .git/**, *.iml, ChessTempoViewer.zip.*"/>
     </target>
 </project>
