@@ -13,10 +13,10 @@ License: GPLv2 or later
 function pgnviewer_js_and_css(){
     $loc = get_locale(); // "de_DE"; //
     wp_enqueue_script("jquery");
-    wp_enqueue_script('pgnyui', 'http://chesstempo.com/js/pgnyui.js');
-    wp_enqueue_script('pgnlocale', "http://chesstempo.com/locale/$loc/LC_MESSAGES/ct.json");
-    wp_enqueue_script('pgnviewer', 'http://chesstempo.com/js/pgnviewer.js');
-    wp_enqueue_style('pgnviewer-css', 'http://chesstempo.com/css/board-min.css');
+    wp_enqueue_script('pgnyui', 'https://chesstempo.com/js/pgnyui.js');
+    wp_enqueue_script('pgnlocale', "https://chesstempo.com/locale/$loc/LC_MESSAGES/ct.json");
+    wp_enqueue_script('pgnviewer', 'https://chesstempo.com/js/pgnviewer.js');
+    wp_enqueue_style('pgnviewer-css', 'https://chesstempo.com/css/board-min.css');
     wp_enqueue_style('ctpgn', plugins_url('ctpgn.css', __FILE__));
 }
 

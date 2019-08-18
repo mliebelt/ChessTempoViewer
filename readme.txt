@@ -3,8 +3,8 @@ Contributors: mliebelt
 Donate link:
 Tags: pgn,chess,chessboard
 Requires at least: 3.0.1
-Tested up to: 4.0.0
-Stable tag: 0.9.5
+Tested up to: 5.2.0
+Stable tag: 0.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ Again the finish of a game with the result. See the variations with their syntax
 
 == Changelog ==
 
+= 0.9.6 =
+* Use https to download all external files. This avoids errors when serving the plugin with https.
+
 = 0.9.5 =
 * Added localization to use the language characters of the blogs language.
 * Supported languages are: en_US, de_DE, fr_FR, pt_BR, es_ES.
@@ -146,6 +149,9 @@ Again the finish of a game with the result. See the variations with their syntax
 * Missing: pgnFile as alternative to embedding the moves.
 
 == Upgrade Notice ==
+
+= 0.9.6 =
+No upgrade notice necessary.
 
 = 0.9.5 =
 See if you can choose the correct language for your word press installation. Localizations are at least available for
