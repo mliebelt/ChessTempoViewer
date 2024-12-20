@@ -1,0 +1,18 @@
+{
+  "name": "chesstempoviewer",
+  "version": "1.0.0",
+  "description": "Build process for ChessTempoViewer WordPress plugin",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && mkdirp dist && rsync -av --exclude=node_modules --exclude=dist --exclude=\"package*.json\" --exclude=.gitignore --exclude=\"screenshot-*.*\" --exclude=.idea ./ dist/",
+    "zip": "cd dist && zip -r ../ChessTempoViewer.zip .",
+    "package": "npm run build && npm run zip"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "^5.0.0",
+    "mkdirp": "^1.0.4"
+  }
+}
