@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Chess Tempo Viewer ===
 Contributors: mliebelt
 Donate link:
 Tags: pgn,chess,chessboard
