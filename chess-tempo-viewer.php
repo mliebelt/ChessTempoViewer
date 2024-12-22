@@ -4,110 +4,117 @@
 Plugin Name: Chess Tempo Viewer
 Plugin URI: http://wordpress.org/plugins/chesstempoviewer/
 Description: Integrates the Chess Tempo Viewer into WordPress
-Version: 0.9.5
+Version: 1.0.0
 Author: Markus Liebelt
 Author URI: http://profiles.wordpress.org/mliebelt
 License: GPLv2 or later
 */
 
-function pgnviewer_js_and_css(){
-    $loc = get_locale(); // "de_DE"; //
-    wp_enqueue_script("jquery");
-    wp_enqueue_script('pgnyui', 'https://chesstempo.com/js/pgnyui.js');
-    wp_enqueue_script('pgnlocale', "https://chesstempo.com/locale/$loc/LC_MESSAGES/ct.json");
-    wp_enqueue_script('pgnviewer', 'https://chesstempo.com/js/pgnviewer.js');
-    wp_enqueue_style('pgnviewer-css', 'https://chesstempo.com/css/board-min.css');
-    wp_enqueue_style('ctpgn', plugins_url('ctpgn.css', __FILE__));
+// Enqueue scripts and styles for the frontend.
+function pgnviewer_enqueue_assets() {
+    $loc = get_locale();
+
+    // Enqueue scripts
+    wp_enqueue_script('pgnlocale', "https://chesstempo.com/locale/$loc/LC_MESSAGES/ct.json", [], null, true);
+    wp_enqueue_script('pgnviewer', 'https://c1a.chesstempo.com/pgnviewer/v2.5/pgnviewerext.bundle.vers1.js', [], null, true);
+
+    // Enqueue styles
+    wp_enqueue_style('pgnviewer-css', 'https://c2a.chesstempo.com/pgnviewer/v2.5/pgnviewerext.vers1.css', [], null);
+    wp_enqueue_style('pgnviewer-fonts', 'https://c1a.chesstempo.com/fonts/MaterialIcons-Regular.woff2', [], null);
+    wp_enqueue_style('pgnviewer-figurine', 'https://c1a.chesstempo.com/fonts/chessalphanew-webfont.woff', [], null);
 }
+add_action('wp_enqueue_scripts', 'pgnviewer_enqueue_assets');
 
-add_action('wp_enqueue_scripts', 'pgnviewer_js_and_css');
-
-// [ctpgn pieceSet=leipzig pieceSize=40 movesformat=main_on_own_line] 1. e4 e5 2. Nf3 Nc6 3. Bb5 [/ctpgn]
-function chessTempoViewer($attributes, $content = NULL) {
-    extract( shortcode_atts( array(
-        'id' => 'demo',
-        'fen' => NULL,
-        'pieceset' => 'merida',
-        'piecesize' => '46',
-        'movesformat' => 'default',
-        'layout' => 'top'
-    ), $attributes ) );
-    $cleaned = cleanup_pgn($content);
-    if (is_null($cleaned)) {
-        $type = "pgnfile";
-        $pgn = $attributes['pgnfile'];
-        $pgnpart = "pgnFile: $pgn";
-    } else {
-        $type = "pgnstring";
-        if (is_null($fen)) {
-            $pgnpart = "pgnString: '$cleaned'";
-        } else {
-            $pgn = '[FEN "' . $fen . ']" ' . $cleaned;
-            $pgnpart = "pgnString: '$pgn'";
-        }
-    }
-    if ($layout == 'bottom') {
-        $float = <<<EOD
-<div id="$id-moves">
-</div><div id="$id-container" class="cont-float-$layout"></div>
-EOD;
-    } else {
-        $float = <<<EOD
-<div id="$id-container" class="cont-float-$layout"></div><div id="$id-moves"></div>
-EOD;
-    }
-    $text = "";
-    //$text .= var_dump($attributes);
-/*    $text .= "Type: $type ";
-    $text .= "Set:  $pieceSet";
-    $text .= "Size: $pieceSize ";
-    $text .= "Format: $movesFormat";*/
-    $template = <<<EOD
-<script>
-    new PgnViewer(
-            { boardName: '$id',
-                $pgnpart,
-                pieceSet: '$pieceset',
-                pieceSize: $piecesize,
-                showCoordinates: true,
-                movesFormat: '$movesformat'
-            }
+// Main shortcode handler for [ctpgn]
+function chess_tempo_viewer_shortcode($attributes, $content = null) {
+    $attributes = shortcode_atts(
+        [
+            'id'          => 'demo',
+            'pieceset'    => 'leipzig',
+            'boardsize'   => '500px',
+            'movesformat' => 'default',
+            'layout'      => 'top',
+        ],
+        $attributes,
+        'ctpgn'
     );
-</script>
 
-$float
-<div class="cont-float-clear"></div>
-EOD;
-    return $text . $template;
+    // Clean and prepare PGN content
+    $cleaned_content = cleanup_pgn($content); // Uses the improved `cleanup_pgn` from before.
+
+    // Escape the content properly for safe output (no WordPress transformations)
+    $cleaned_content = htmlspecialchars($cleaned_content, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+    // Construct the viewer element
+    return sprintf(
+        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" layout="%s">%s</ct-pgn-viewer>',
+        esc_attr($attributes['id']),
+        esc_attr($attributes['pieceset']),
+        esc_attr($attributes['boardsize']),
+        esc_attr($attributes['layout']),
+        $cleaned_content // Insert PGN unaltered (HTML-escaped manually)
+    );
+}
+add_shortcode('ctpgn', 'chess_tempo_viewer_shortcode');
+
+// Clean up PGN content to avoid format issues
+function cleanup_pgn($content) {
+    // Remove any unwanted HTML tags accidentally injected (e.g., by wpautop)
+    $content = wp_strip_all_tags($content);
+    // Replace smart quotes (left, right) with standard ASCII quotes
+    $smart_quotes = [
+        '“', '”', '‘', '’', // Smart quotes
+        '&#8220;', '&#8221;', '&#8216;', '&#8217;', // HTML-encoded smart quotes
+    ];
+    $standard_quotes = [
+        '"',   '"',   "'",   "'", // Replace all with standard single/double quotes
+    ];
+    $content = str_replace($smart_quotes, $standard_quotes, $content);
+    // Normalize ellipsis
+    $content = str_replace(["…", '&#8230;'], '..', $content);
+
+    // Normalize line breaks (convert to spaces)
+    $content = preg_replace('/[\r\n]+/', ' ', $content);
+
+    // Reduce multiple spaces to a single space
+    $content = preg_replace('/\s+/', ' ', $content);
+
+    // Trim the final cleaned content
+    return trim($content);
 }
 
-add_shortcode( 'ctpgn', 'chessTempoViewer');
+add_action('enqueue_block_editor_assets', function () {
+    wp_enqueue_script('wp-blocks');
+    wp_enqueue_script('wp-element');
+    wp_enqueue_script('wp-editor');
+});
 
-// Cleanup the content, so it will not have any errors. Known are
-// * line breaks ==> Spaces
-// * Pattern: ... ==> ..
-function cleanup_pgn( $content ) {
-    $search = array("...", "&#8230;");
-    $replace = array("..", "..");
-    $tmp = str_replace($search, $replace, $content);
-    return str_replace (array("\r\n", "\n", "\r", "<br />"), ' ', $tmp);
+function chess_tempo_register_block() {
+    wp_register_script(
+        'chess-tempo-block',
+        plugins_url('build/index.js', __FILE__), // Path to your custom block script
+        ['wp-blocks', 'wp-element', 'wp-editor'], // Block dependencies
+        null,
+        true
+    );
+
+    register_block_type('chess-tempo/viewer', [
+        'editor_script' => 'chess-tempo-block', // Enqueue the JavaScript
+        'render_callback' => 'chess_tempo_render_block', // Server-rendered PGN
+    ]);
 }
+add_action('init', 'chess_tempo_register_block');
 
-/** Step 2 (from text above). */
-add_action( 'admin_menu', 'ctpgn_menu' );
+// Callback to server-render (PHP side rendering)
+function chess_tempo_render_block($attributes) {
+    $pgn_content = isset($attributes['pgn']) ? cleanup_pgn($attributes['pgn']) : '';
+    $pieceset = isset($attributes['pieceset']) ? $attributes['pieceset'] : 'leipzig';
+    $id = isset($attributes['id']) ? $attributes['id'] : 'demo';
 
-/** Step 1. */
-function ctpgn_menu() {
-    add_submenu_page('options-general.php', 'Chess Tempo Viewer Settings', 'Chess Tempo Viewer', 'administrator', __FILE__, 'ctpgn_options' );
+    return sprintf(
+        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" moves-format="default" layout="top">%s</ct-pgn-viewer>',
+        esc_attr($id),
+        esc_attr($pieceset),
+        esc_html($pgn_content)
+    );
 }
-
-/** Step 3. */
-function ctpgn_options() {
-    if ( !current_user_can( 'manage_options' ) )  {
-        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-    }
-    echo '<div class="wrap">';
-    echo '<p>Greetings from Chess Tempo Viewer.</p>';
-    echo '</div>';
-}
-?>
