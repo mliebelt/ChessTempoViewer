@@ -10,6 +10,9 @@
        attributes: {
            id: { type: 'string', default: '' },
            pieceset: { type: 'string', default: 'alpha' },
+           boardsize: { type: 'string', default: '500px' },
+           movelistposition: { type: 'string', default: 'right' }, // options: right, under
+           moveliststyle: { type: 'string', default: 'indented' }, // options: indented/twocolumn
            pgn: { type: 'string', default: '' },
        },
        edit: ({ attributes, setAttributes }) => {
@@ -45,9 +48,36 @@
                        __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
                    />
                    <TextControl
+                       label={__('Board Size')}
+                       value={attributes.boardsize}
+                       onChange={(val) => setAttributes({ boardsize: val })}
+                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                   />
+                   <SelectControl
+                       label={__('Position of Move List')}
+                       value={attributes.movelistposition} // The current selected value
+                       options={[
+                           { label: 'Right (Default)', value: 'right' },
+                           { label: 'Under', value: 'under' },
+                       ]} // Drop-down options
+                       onChange={(newValue) => setAttributes({ movelistposition: newValue })} // Update the attribute when user selects a new value
+                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                   />
+                   <SelectControl
+                       label={__('Move List Style')}
+                       value={attributes.moveliststyle} // The current selected value
+                       options={[
+                           { label: 'Indented (Default)', value: 'indented' },
+                           { label: 'Two Column', value: 'twocolumn' },
+                       ]} // Drop-down options
+                       onChange={(newValue) => setAttributes({ moveliststyle: newValue })} // Update the attribute when user selects a new value
+                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                   />
+                   <TextControl
                        label={__('Viewer ID')}
                        value={attributes.id}
                        onChange={(val) => setAttributes({ id: val })}
+                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
                    />
                </div>
            );

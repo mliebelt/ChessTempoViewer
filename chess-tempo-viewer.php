@@ -34,6 +34,8 @@ function chess_tempo_viewer_shortcode($attributes, $content = null) {
             'boardsize'   => '500px',
             'movesformat' => 'default',
             'layout'      => 'top',
+            'movelistposition' => 'right',
+            'moveliststyle' => 'indented', // possible: indented/twocolumn
         ],
         $attributes,
         'ctpgn'
@@ -47,11 +49,13 @@ function chess_tempo_viewer_shortcode($attributes, $content = null) {
 
     // Construct the viewer element
     return sprintf(
-        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" layout="%s">%s</ct-pgn-viewer>',
+        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" layout="%s" move-list-position="%s">%s</ct-pgn-viewer>',
         esc_attr($attributes['id']),
         esc_attr($attributes['pieceset']),
         esc_attr($attributes['boardsize']),
         esc_attr($attributes['layout']),
+        esc_attr($attributes['movelistposition']),
+        esc_attr($attributes['moveliststyle']),
         $cleaned_content // Insert PGN unaltered (HTML-escaped manually)
     );
 }
@@ -108,13 +112,19 @@ add_action('init', 'chess_tempo_register_block');
 // Callback to server-render (PHP side rendering)
 function chess_tempo_render_block($attributes) {
     $pgn_content = isset($attributes['pgn']) ? cleanup_pgn($attributes['pgn']) : '';
-    $pieceset = isset($attributes['pieceset']) ? $attributes['pieceset'] : 'leipzig';
+    $pieceset = isset($attributes['pieceset']) ? $attributes['pieceset'] : 'merida-gradient';
+    $boardsize = isset($attributes['boardsize']) ? $attributes['boardsize'] : '500px';
+    $movelistposition = isset($attributes['movelistposition']) ? $attributes['movelistposition'] : 'right';
+    $moveliststyle = isset($attributes['moveliststyle']) ? $attributes['moveliststyle'] : 'indented';
     $id = isset($attributes['id']) ? $attributes['id'] : 'demo';
 
     return sprintf(
-        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" moves-format="default" layout="top">%s</ct-pgn-viewer>',
+        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" move-list-position="%s" move-list-moveListStyle="%s" move-list-resizable="true">%s</ct-pgn-viewer>',
         esc_attr($id),
         esc_attr($pieceset),
+        esc_attr($boardsize),
+        esc_attr($movelistposition),
+        esc_attr($moveliststyle),
         esc_html($pgn_content)
     );
 }
