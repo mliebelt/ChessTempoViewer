@@ -10,6 +10,14 @@ Author URI: http://profiles.wordpress.org/mliebelt
 License: GPLv2 or later
 */
 
+// Allow upload of pgn files.
+function allow_pgn_uploads($mimes) {
+    // Add support for `.pgn` files
+    $mimes['pgn'] = 'text/plain';
+    return $mimes;
+}
+add_filter('upload_mimes', 'allow_pgn_uploads');
+
 // Enqueue scripts and styles for the frontend.
 function pgnviewer_enqueue_assets() {
     $loc = get_locale();
@@ -133,7 +141,7 @@ function chess_tempo_render_block($attributes) {
     $boardsize = isset($attributes['boardsize']) ? $attributes['boardsize'] : '500px';
     $movelistposition = isset($attributes['movelistposition']) ? $attributes['movelistposition'] : 'right';
     $moveliststyle = isset($attributes['moveliststyle']) ? $attributes['moveliststyle'] : 'indented';
-    $pgnfile = isset($attributes['pgnfile']) ? $attributes['pgnfile'] : 'false';
+    $pgnfile = !empty($attributes['pgnfile']) ? 'true' : 'false'; // Convert truthy to 'true/false'
     $fen = isset($attributes['fen']) ? $attributes['fen'] : '';
     $id = isset($attributes['id']) ? $attributes['id'] : 'demo';
 
@@ -144,7 +152,7 @@ function chess_tempo_render_block($attributes) {
         esc_attr($boardsize),
         esc_attr($movelistposition),
         esc_attr($moveliststyle),
-        esc_attr($pgnfile),
+        $pgnfile, // Already converted to true/false
         esc_attr($fen),
         esc_html($pgn_content)
     );

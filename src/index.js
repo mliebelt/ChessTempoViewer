@@ -33,7 +33,7 @@
                            label={__('Use PGN File')}
                            help={__('Enable this if you want to import PGN content via a file.')}
                            checked={attributes.pgnfile}
-                           onChange={(isChecked) => setAttributes({ pgnfile: !!isChecked })}
+                           onChange={(isChecked) => setAttributes({ pgnfile: Boolean(isChecked) })}
                            __nextHasNoMarginBottom={true}
                        />
                        <TextControl
@@ -57,62 +57,61 @@
 
                    {/* Third Row (Three Elements Spaced Equally) */}
                    <div className="row group-3">
-                   <SelectControl
-                       label="Piece Set"
-                       value={attributes.pieceset} // The current selected value
-                       options={[
-                           { label: 'Merida (Default)', value: 'merida-gradient' },
-                           { label: 'Goodcomp', value: 'goodcomp-gradient' },
-                           { label: 'Alpha', value: 'alpha' },
-                           { label: 'Case', value: 'case' },
-                           { label: 'Eyes', value: 'eyes' },
-                           { label: 'Leipzig', value: 'leipzig' },
-                           { label: 'Maya', value: 'maya' },
-                           { label: 'Skulls', value: 'skulls' },
-                       ]} // Drop-down options
-                       onChange={(newValue) => setAttributes({ pieceset: newValue })} // Update the attribute when user selects a new value
-                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
-                   />
-                   <TextControl
-                       label={__('Board Size')}
-                       value={attributes.boardsize}
-                       onChange={(val) => setAttributes({ boardsize: val })}
-                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
-                   />
-                   <SelectControl
-                       label={__('Position of Move List')}
-                       value={attributes.movelistposition} // The current selected value
-                       options={[
-                           { label: 'Right (Default)', value: 'right' },
-                           { label: 'Under', value: 'under' },
-                       ]} // Drop-down options
-                       onChange={(newValue) => setAttributes({ movelistposition: newValue })} // Update the attribute when user selects a new value
-                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
-                   />
-
+                       <SelectControl
+                           label="Piece Set"
+                           value={attributes.pieceset} // The current selected value
+                           options={[
+                               { label: 'Merida (Default)', value: 'merida-gradient' },
+                               { label: 'Goodcomp', value: 'goodcomp-gradient' },
+                               { label: 'Alpha', value: 'alpha' },
+                               { label: 'Case', value: 'case' },
+                               { label: 'Eyes', value: 'eyes' },
+                               { label: 'Leipzig', value: 'leipzig' },
+                               { label: 'Maya', value: 'maya' },
+                               { label: 'Skulls', value: 'skulls' },
+                           ]} // Drop-down options
+                           onChange={(newValue) => setAttributes({ pieceset: newValue })} // Update the attribute when user selects a new value
+                           __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                       />
+                       <TextControl
+                           label={__('Board Size')}
+                           value={attributes.boardsize}
+                           onChange={(val) => setAttributes({ boardsize: val })}
+                           __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                       />
+                       <SelectControl
+                           label={__('Position of Move List')}
+                           value={attributes.movelistposition} // The current selected value
+                           options={[
+                               { label: 'Right (Default)', value: 'right' },
+                               { label: 'Under', value: 'under' },
+                           ]} // Drop-down options
+                           onChange={(newValue) => setAttributes({ movelistposition: newValue })} // Update the attribute when user selects a new value
+                           __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                       />
                    </div>
 
-           {/* Fourth Row (Two Elements Spaced Equally) */}
-           <div className="row group-2">
-                   <SelectControl
-                       label={__('Move List Style')}
-                       value={attributes.moveliststyle} // The current selected value
-                       options={[
-                           { label: 'Indented (Default)', value: 'indented' },
-                           { label: 'Two Column', value: 'twocolumn' },
-                       ]} // Drop-down options
-                       onChange={(newValue) => setAttributes({ moveliststyle: newValue })} // Update the attribute when user selects a new value
-                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
-                   />
-                   <TextControl
-                       label={__('Viewer ID')}
-                       value={attributes.id}
-                       onChange={(val) => setAttributes({ id: val })}
-                       __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
-                   />
-               </div>
-           </div>
-           );
+                   {/* Fourth Row (Two Elements Spaced Equally) */}
+                   <div className="row group-2">
+                           <SelectControl
+                               label={__('Move List Style')}
+                               value={attributes.moveliststyle} // The current selected value
+                               options={[
+                                   { label: 'Indented (Default)', value: 'indented' },
+                                   { label: 'Two Column', value: 'twocolumn' },
+                               ]} // Drop-down options
+                               onChange={(newValue) => setAttributes({ moveliststyle: newValue })} // Update the attribute when user selects a new value
+                               __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                           />
+                           <TextControl
+                               label={__('Viewer ID')}
+                               value={attributes.id}
+                               onChange={(val) => setAttributes({ id: val })}
+                               __nextHasNoMarginBottom={true} // Avoid margin-bottom deprecation warning
+                           />
+                       </div>
+                   </div>
+                   );
        },
        save: () => null, // Server-side rendered block
    });
