@@ -28,7 +28,7 @@
            return (
                <div {...blockProps}>
                    {/* First Row (Two Elements Side by Side) */}
-                   <div className="row group-2">
+                   <div className="row group-12">
                        <CheckboxControl
                            label={__('Use PGN File')}
                            help={__('Enable this if you want to import PGN content via a file.')}
