@@ -1,0 +1,36 @@
+/* Group Rows */
+.chess-tempo-viewer-wrapper .row {
+    display: flex;
+    flex-wrap: wrap; /* Allow flexible wrapping */
+    margin-bottom: 20px;
+}
+
+/* Group 2: Two Items */
+.chess-tempo-viewer-wrapper .group-2 > div {
+    flex: 1; /* Distribute evenly */
+    max-width: 50%; /* Each a maximum of half-width */
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+/* Group 1: Full-Width Element */
+.chess-tempo-viewer-wrapper .group-1 > div {
+    flex: 1 0 100%; /* Take the full width */
+    padding: 0 10px;
+}
+
+/* Group 3: Three Items Equally Spread */
+.chess-tempo-viewer-wrapper .group-3 > div {
+    flex: 1; /* Equally spaced */
+    max-width: 33%; /* Each item a maximum of one-third width */
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+/* Make It Responsive */
+@media (max-width: 768px) {
+    .chess-tempo-viewer-wrapper .group-1 > div,
+    .chess-tempo-viewer-wrapper .group-3 > div {
+        max-width: 100%; /* Stack the rows on smaller screens */
+    }
+}

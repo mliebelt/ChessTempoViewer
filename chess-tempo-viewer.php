@@ -22,6 +22,9 @@ function pgnviewer_enqueue_assets() {
     wp_enqueue_style('pgnviewer-css', 'https://c2a.chesstempo.com/pgnviewer/v2.5/pgnviewerext.vers1.css', [], null);
     wp_enqueue_style('pgnviewer-fonts', 'https://c1a.chesstempo.com/fonts/MaterialIcons-Regular.woff2', [], null);
     wp_enqueue_style('pgnviewer-figurine', 'https://c1a.chesstempo.com/fonts/chessalphanew-webfont.woff', [], null);
+    wp_enqueue_style(
+        'chess-viewer-block-style',
+        plugins_url('css/chess_viewer_styles.css', __FILE__), [], '1.0.0');
 }
 add_action('wp_enqueue_scripts', 'pgnviewer_enqueue_assets');
 
@@ -36,6 +39,7 @@ function chess_tempo_viewer_shortcode($attributes, $content = null) {
             'layout'      => 'top',
             'movelistposition' => 'right',
             'moveliststyle' => 'indented', // possible: indented/twocolumn
+            'pgnfile' => 'false',
         ],
         $attributes,
         'ctpgn'
@@ -56,6 +60,8 @@ function chess_tempo_viewer_shortcode($attributes, $content = null) {
         esc_attr($attributes['layout']),
         esc_attr($attributes['movelistposition']),
         esc_attr($attributes['moveliststyle']),
+        esc_attr($attributes['pgnfile']),
+        esc_attr($attributes['fen']),
         $cleaned_content // Insert PGN unaltered (HTML-escaped manually)
     );
 }
@@ -93,6 +99,7 @@ add_action('enqueue_block_editor_assets', function () {
     wp_enqueue_script('wp-editor');
 });
 
+
 function chess_tempo_register_block() {
     wp_register_script(
         'chess-tempo-block',
@@ -109,6 +116,16 @@ function chess_tempo_register_block() {
 }
 add_action('init', 'chess_tempo_register_block');
 
+// Add styles for the Gutenberg editor
+function chess_tempo_enqueue_editor_styles() {
+    wp_enqueue_style(
+        'chess-viewer-editor-style',
+        plugins_url('css/chess_viewer_styles.css', __FILE__), [], // No dependencies
+        '1.0.0' // Version
+    );
+}
+add_action('enqueue_block_editor_assets', 'chess_tempo_enqueue_editor_styles');
+
 // Callback to server-render (PHP side rendering)
 function chess_tempo_render_block($attributes) {
     $pgn_content = isset($attributes['pgn']) ? cleanup_pgn($attributes['pgn']) : '';
@@ -116,15 +133,19 @@ function chess_tempo_render_block($attributes) {
     $boardsize = isset($attributes['boardsize']) ? $attributes['boardsize'] : '500px';
     $movelistposition = isset($attributes['movelistposition']) ? $attributes['movelistposition'] : 'right';
     $moveliststyle = isset($attributes['moveliststyle']) ? $attributes['moveliststyle'] : 'indented';
+    $pgnfile = isset($attributes['pgnfile']) ? $attributes['pgnfile'] : 'false';
+    $fen = isset($attributes['fen']) ? $attributes['fen'] : '';
     $id = isset($attributes['id']) ? $attributes['id'] : 'demo';
 
     return sprintf(
-        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" move-list-position="%s" move-list-moveListStyle="%s" move-list-resizable="true">%s</ct-pgn-viewer>',
+        '<ct-pgn-viewer id="%s" board-pieceStyle="%s" board-size="%s" move-list-position="%s" move-list-moveListStyle="%s" has-url="%s" board-fen="%s" move-list-resizable="true">%s</ct-pgn-viewer>',
         esc_attr($id),
         esc_attr($pieceset),
         esc_attr($boardsize),
         esc_attr($movelistposition),
         esc_attr($moveliststyle),
+        esc_attr($pgnfile),
+        esc_attr($fen),
         esc_html($pgn_content)
     );
 }
