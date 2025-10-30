@@ -20,7 +20,7 @@
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "@wordpress/scripts": "^30.26.0",
+    "@wordpress/scripts": "^30.27.0",
     "@wordpress/env": "^10.33.0",
     "mkdirp": "^3.0.1",
     "rimraf": "^6.0.1"
