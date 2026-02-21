@@ -21,7 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "@wordpress/scripts": "^31.5.0",
-    "@wordpress/env": "^10.39.0",
+    "@wordpress/env": "^11.0.0",
     "mkdirp": "^3.0.1",
     "rimraf": "^6.1.3"
   }
